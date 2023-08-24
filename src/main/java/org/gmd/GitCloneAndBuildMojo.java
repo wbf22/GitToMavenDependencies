@@ -3,59 +3,44 @@ package org.gmd;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.eclipse.jgit.api.CloneCommand;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
 
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 
 @Mojo(name = "git-to-maven-dependencies")
 public class GitCloneAndBuildMojo extends AbstractMojo {
 
     @Parameter(defaultValue = "https://github.com/yourusername/your-repo.git")
-    private String gitRepoUrl;
+    private String gitRawLinkToJar;
 
-    @Parameter(defaultValue = "${project.build.directory}/git-repo")
+    @Parameter(defaultValue = "${project.build.directory}/libs")
     private String targetDirectory;
 
-    @Parameter(defaultValue = "main")
-    private String branch;
+    @Parameter(defaultValue = "library.jar")
+    private String jarFilename;
 
-    public GitCloneAndBuildMojo(String gitRepoUrl, String targetDirectory, String branch) {
-        this.gitRepoUrl = gitRepoUrl;
+    public GitCloneAndBuildMojo(String gitRawLinkToJar, String targetDirectory, String jarFilename) {
+        this.gitRawLinkToJar = gitRawLinkToJar;
         this.targetDirectory = targetDirectory;
-        this.branch = branch;
+        this.jarFilename = jarFilename;
     }
+
 
     public void execute() {
         try {
-            // Clone the Git repository
-            CloneCommand cloneCommand = Git.cloneRepository()
-                .setBranch(branch)
-                .setURI(gitRepoUrl)
-                .setDirectory(new File(targetDirectory));
-            Git git = cloneCommand.call();
+            URL url = new URL(gitRawLinkToJar);
+            Path targetPath = Path.of(targetDirectory, jarFilename);
 
-            // Change to the cloned directory
-            File clonedDirectory = git.getRepository().getDirectory();
-            clonedDirectory = clonedDirectory.getParentFile(); // Remove .git from the path
+            Files.createDirectories(targetPath.getParent());
+            Files.copy(url.openStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
 
-            // Run 'mvn clean install'
-            ProcessBuilder processBuilder = new ProcessBuilder("mvn", "clean", "install");
-            processBuilder.directory(clonedDirectory);
-            Process process = processBuilder.start();
-            int exitCode = process.waitFor();
-            if (exitCode == 0) {
-                getLog().info("Maven build successful.");
-            } else {
-                getLog().error("Maven build failed.");
-            }
-            FileUtil.deleteDirectory(clonedDirectory.toPath());
-
-        } catch (GitAPIException | InterruptedException | IOException e) {
-            getLog().error("Error during Git clone or Maven build.", e);
+            getLog().info("JAR file downloaded successfully to " + targetDirectory);
+        } catch (IOException e) {
+            System.err.println("Error downloading the file: " + e.getMessage());
         }
     }
 }

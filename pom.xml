@@ -30,7 +30,7 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
-            <version>3.0</version>
+            <version>3.9.4</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jgit</groupId>
@@ -40,9 +40,10 @@
         <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
             <artifactId>maven-plugin-annotations</artifactId>
-            <version>3.6.0</version>
+            <version>3.9.0</version>
             <scope>provided</scope>
         </dependency>
+
 
 
     </dependencies>
@@ -53,15 +54,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
-                <version>3.6.0</version> <!-- Adjust version as needed -->
+                <version>3.9.0</version>
                 <configuration>
                     <goalPrefix>git-to-maven-dependencies</goalPrefix>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>git-to-maven-dependencies</id>
                         <goals>
-                            <goal>git-to-maven-dependencies</goal>
+                            <goal>descriptor</goal>
                         </goals>
                     </execution>
 
