@@ -9,6 +9,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 
 
 @Mojo(name = "git-to-maven-dependencies")
@@ -22,6 +23,9 @@ public class GitCloneAndBuildMojo extends AbstractMojo {
 
     @Parameter(defaultValue = "library.jar")
     private String jarFilename;
+
+    public GitCloneAndBuildMojo() {
+    }
 
     public GitCloneAndBuildMojo(String gitRawLinkToJar, String targetDirectory, String jarFilename) {
         this.gitRawLinkToJar = gitRawLinkToJar;
@@ -40,7 +44,20 @@ public class GitCloneAndBuildMojo extends AbstractMojo {
 
             getLog().info("JAR file downloaded successfully to " + targetDirectory);
         } catch (IOException e) {
-            System.err.println("Error downloading the file: " + e.getMessage());
+            getLog().info("Error downloading the file: " + e.getMessage());
+            e.printStackTrace();
         }
+    }
+
+    public void setGitRawLinkToJar(String gitRawLinkToJar) {
+        this.gitRawLinkToJar = gitRawLinkToJar;
+    }
+
+    public void setTargetDirectory(String targetDirectory) {
+        this.targetDirectory = targetDirectory;
+    }
+
+    public void setJarFilename(String jarFilename) {
+        this.jarFilename = jarFilename;
     }
 }

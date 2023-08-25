@@ -7,7 +7,7 @@ public class GitCloneAndBuildMojoTest {
     public static void main(String args[]) {
 
         GitCloneAndBuildMojo mojo = new GitCloneAndBuildMojo(
-            "https://raw.githubusercontent.com/wbf22/PickGraph/main/src/main/java/org/pickgraph/PickGraph.java",
+            "https://github.com/wbf22/TestDependency/raw/main/src/main/java/org/test/TestDependency-1.0.0.jar",
             "/Users/brandon.fowler/Documents/UniversalUrl",
             "pg.java"
         );

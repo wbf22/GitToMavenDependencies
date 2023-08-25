@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.gmd</groupId>
     <artifactId>plugin</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.9</version>
 
     <name>GitToMavenDependencies</name>
     <url>http://maven.apache.org</url>
@@ -43,8 +43,24 @@
             <version>3.9.0</version>
             <scope>provided</scope>
         </dependency>
-
-
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>3.9.4</version>
+            <scope>provided</scope> <!-- Change the scope to 'provided' -->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-model</artifactId>
+            <version>3.9.4</version>
+            <scope>provided</scope> <!-- Change the scope to 'provided' -->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-artifact</artifactId>
+            <version>3.9.4</version>
+            <scope>provided</scope> <!-- Change the scope to 'provided' -->
+        </dependency>
 
     </dependencies>
 
@@ -60,11 +76,11 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>git-to-maven-dependencies</id>
                         <goals>
                             <goal>descriptor</goal>
                         </goals>
                     </execution>
-
                 </executions>
             </plugin>
         </plugins>
